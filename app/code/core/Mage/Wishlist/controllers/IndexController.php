@@ -583,7 +583,7 @@ class Mage_Wishlist_IndexController extends Mage_Wishlist_Controller_Abstract
             $productName = Mage::helper('core')->escapeHtml($item->getProduct()->getName());
             $wishlistName = Mage::helper('core')->escapeHtml($wishlist->getName());
             $session->addSuccess(
-                Mage::helper('wishlist')->__("%s has been moved to wishlist %s", $productName, $wishlistName)
+                Mage::helper('wishlist')->__("%s has been moved to Wishlist", $productName, $wishlistName)
             );
             $wishlist->save();
         } catch (Mage_Core_Exception $e) {

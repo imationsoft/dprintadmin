@@ -27,6 +27,7 @@
 -->
 <layout version="0.1.0">
     <contacts_index_index translate="label">
+	<remove name="footer"/>
         <label>Contact Us Form</label>
         <reference name="head">
             <action method="setTitle" translate="title" module="contacts"><title>Contact Us</title></action>

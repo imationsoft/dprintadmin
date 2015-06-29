@@ -87,6 +87,8 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
             ->sendResponse();
         return $this;
     }
+	
+	
 
     /**
      * Validate ajax request and redirect on failure

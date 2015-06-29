@@ -185,7 +185,6 @@ class Mage_Admin_Model_Session extends Mage_Core_Model_Session_Abstract
      */
     public function isAllowed($resource, $privilege = null)
     {
-       // print_r($resource);exit;
         $user = $this->getUser();
         $acl = $this->getAcl();
 

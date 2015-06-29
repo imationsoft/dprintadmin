@@ -130,9 +130,9 @@
                             id="qinput-<?php echo $_item->getId(); ?>"
                             data-link="<?php echo $this->getAjaxUpdateUrl() ?>"
                             data-item-id="<?php echo $_item->getId(); ?>"
-                            class="qty cart-item-quantity input-text" name=""
+                            class="qty cart-item-quantity input-text" name="" disabled
                             value="<?php echo $this->getQty()?>"
-                            <?php if ($this->isOnCheckoutPage()) echo 'disabled'; ?>
+                            <?php //if ($this->isOnCheckoutPage()) echo 'disabled'; ?>
                             />
 
                         <button id="qbutton-<?php echo $_item->getId(); ?>"
@@ -147,7 +147,7 @@
             </tbody>
         </table>
 
-        <?php if ($isVisibleProduct): ?>
+       <?php /*?> <?php if ($isVisibleProduct): ?>
         <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo $this->__('Edit item') ?>" class="btn-edit">
             <?php echo $this->__('Edit item')?>
         </a>
@@ -162,7 +162,7 @@
                 <span><?php echo $this->__('Remove Item') ?></span>
             <?php endif; ?>
         <?php endif ?>
-
+<?php */?>
 
 
         <?php if ($_options = $this->getOptionList()):?>

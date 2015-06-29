@@ -219,7 +219,6 @@ class Mage_Adminhtml_Block_Widget_Container extends Mage_Adminhtml_Block_Templat
      */
     public function getButtonsHtml($area = null)
     {
-
         $out = '';
         foreach ($this->_buttons as $level => $buttons) {
             $_buttons = array();

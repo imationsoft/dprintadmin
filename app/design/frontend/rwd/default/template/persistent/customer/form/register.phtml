@@ -33,9 +33,12 @@
 /** @var $this Mage_Customer_Block_Form_Register */
 ?>
 <div class="account-create">
-    <div class="page-title">
+    <!-- <div class="page-title">
         <h1><?php echo $this->__('Create an Account') ?></h1>
-    </div>
+    </div> -->
+	<div class="page-logo">
+		<img src="<?php echo $this->getSkinUrl('images/dprintLA_logo.png');?>"/>
+	</div>
     <?php echo $this->getChildHtml('form_fields_before')?>
     <?php echo $this->getMessagesBlock()->toHtml() ?>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" class="scaffold-form" enctype="multipart/form-data">
@@ -171,7 +174,7 @@
         </div>
         <div class="buttons-set">
             <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="back-link"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
-            <button type="submit" title="<?php echo $this->__('Register') ?>" class="button"><span><span><?php echo $this->__('Register') ?></span></span></button>
+            <button type="submit" title="<?php echo $this->__('Register') ?>" class="btn-1"><span><span><?php echo $this->__('Register') ?></span></span></button>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />

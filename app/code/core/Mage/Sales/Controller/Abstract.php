@@ -58,7 +58,7 @@ abstract class Mage_Sales_Controller_Abstract extends Mage_Core_Controller_Front
      * @return null
      */
     protected function _viewAction()
-    {	
+    {
         if (!$this->_loadValidOrder()) {
             return;
         }

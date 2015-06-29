@@ -35,12 +35,12 @@ Default layout, loads most of the pages
     <default>
 
         <!-- Mage_Checkout -->
-        <reference name="top.links">
+        <!--<reference name="top.links">
             <block type="checkout/links" name="checkout_cart_link">
                 <action method="addCartLink"></action>
                 <action method="addCheckoutLink"></action>
             </block>
-        </reference>
+        </reference>-->
 
         <reference name="header">
             <block type="checkout/cart_minicart" name="minicart_head" template="checkout/cart/minicart.phtml" before="-">
@@ -76,6 +76,7 @@ Default layout, loads most of the pages
         <label>Shopping Cart</label>
         <remove name="right"/>
         <remove name="left"/>
+		<remove name="footer"/>
         <!-- Mage_Checkout -->
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -127,6 +128,7 @@ Default layout, loads most of the pages
     </checkout_cart_index>
 
     <checkout_cart_configure translate="label">
+		<remove name="footer"/>
         <label>Configure Cart Item</label>
         <update handle="catalog_product_view"/>
         <reference name="product.info">
@@ -144,6 +146,7 @@ will be rendered on all checkout pages
         <!-- Mage_Checkout -->
         <remove name="right"/>
         <remove name="left"/>
+		<remove name="footer"/>
 
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -167,6 +170,7 @@ Multi address shipping checkout selection of address per item page
 
     <checkout_multishipping_address_select translate="label">
         <label>Multishipping Checkout Shipping Address Selection</label>
+	
         <update handle="checkout_multishipping"/>
         <!-- Mage_Checkout -->
         <reference name="content">
@@ -175,6 +179,7 @@ Multi address shipping checkout selection of address per item page
     </checkout_multishipping_address_select>
 
     <checkout_multishipping_address_selectbilling translate="label">
+	
         <label>Multishipping Checkout Billing Address Selection</label>
         <update handle="checkout_multishipping"/>
         <!-- Mage_Checkout -->
@@ -185,6 +190,7 @@ Multi address shipping checkout selection of address per item page
 
 
     <checkout_multishipping_address_newshipping translate="label">
+	
         <label>Multishipping Checkout Shipping Address Creation</label>
         <update handle="checkout_multishipping"/>
         <update handle="checkout_multishipping_customer_address"/>
@@ -345,6 +351,7 @@ One page checkout main layout
         <label>One Page Checkout</label>
         <!-- Mage_Checkout -->
         <remove name="left"/>
+		<remove name="footer"/>
 
         <reference name="root">
             <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
@@ -529,6 +536,22 @@ One page checkout order review block
             <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
         </reference>
     </checkout_onepage_success>
+	
+	<!--  custom order -->
+	
+	<checkout_onepage_ordersuccess translate="label">
+        <label>Success</label>
+		<remove name="right"/>
+        <remove name="footer"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="checkout/onepage_success" name="checkout.ordersuccess" template="checkout/onepage/ordersuccess.phtml"/>
+        </reference>
+    </checkout_onepage_ordersuccess>
+	
+	
     <checkout_onepage_failure translate="label">
         <label>One Page Checkout Failure</label>
         <reference name="root">

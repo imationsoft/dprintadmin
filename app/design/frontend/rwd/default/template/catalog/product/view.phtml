@@ -58,11 +58,11 @@
                     <span class="h1"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></span>
                 </div>
 
-                <div class="price-info">
+                <!-- <div class="price-info">
                     <?php echo $this->getPriceHtml($_product); ?>
                     <?php echo $this->getChildHtml('bundle_prices') ?>
                     <?php echo $this->getTierPriceHtml() ?>
-                </div>
+                </div> -->
 
                 <div class="extra-info">
                     <?php echo $this->getReviewsSummaryHtml($_product, 'default', false)?>
@@ -100,19 +100,19 @@
                                 <span class="or"><?php echo $this->__('OR') ?></span>
                             <?php endif; ?>
                         <?php endif; ?>
-                        <?php echo $this->getChildHtml('addto') ?>
-                        <?php echo $this->getChildHtml('sharing') ?>
+                        <?php // echo $this->getChildHtml('addto') ?>
+                        <?php //echo $this->getChildHtml('sharing') ?>
                     </div>
                     <?php echo $this->getChildHtml('extra_buttons') ?>
                 <?php elseif (!$_product->isSaleable()): ?>
                     <div class="add-to-box">
-                        <?php echo $this->getChildHtml('addto') ?>
-                        <?php echo $this->getChildHtml('sharing') ?>
+                        <?php //echo $this->getChildHtml('addto') ?>
+                        <?php //echo $this->getChildHtml('sharing') ?>
                     </div>
                 <?php endif; ?>
             </div>
 
-            <?php echo $this->getChildHtml('related_products') ?>
+            
 
             <div class="clearer"></div>
             <?php if ($_product->isSaleable() && $this->hasOptions()):?>
@@ -168,11 +168,20 @@
                     Object.extend(Validation.methods, nv);
                 }
             }.bind(productAddToCartForm);
+			
+			
+			productAddToCartForm.submitCustomize = function(button, url){
+				var form = this.form;
+				url = '<?php echo Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true )?>'+'customize-order.html';
+				form.action = url;
+				this.form.submit();
+			}.bind(productAddToCartForm);	
+			
         //]]>
         </script>
     </div>
 
-    <div class="product-collateral toggle-content tabs">
+   <!-- <div class="product-collateral toggle-content tabs">
         <?php if ($detailedInfoGroup = $this->getChildGroup('detailed_info', 'getChildHtml')):?>
             <dl id="collateral-tabs" class="collateral-tabs">
                 <?php foreach ($detailedInfoGroup as $alias => $html):?>
@@ -184,8 +193,9 @@
             </dl>
         <?php endif; ?>
     </div>
-
-    <?php echo $this->getChildHtml('upsell_products') ?>
-    <?php echo $this->getChildHtml('product_additional_data') ?>
+    -->
+    <?php //echo $this->getChildHtml('upsell_products') ?>
+    <?php //echo $this->getChildHtml('product_additional_data') ?>
 
 </div>
+<?php echo $this->getChildHtml('related_products') ?>

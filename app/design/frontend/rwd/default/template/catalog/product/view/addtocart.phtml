@@ -25,18 +25,37 @@
  */
 ?>
 <?php $_product = $this->getProduct(); ?>
-<?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php $buttonTitle = $this->__('ORDER THIS ITEM'); ?>
+<?php 
+$attr = $_product->getResource()->getAttribute('dropdown_quantity')->getFrontend()->getValue($_product); 
+$quantity = explode(',',$attr);
+?>
 <?php if($_product->isSaleable()): ?>
     <div class="add-to-cart">
         <?php if(!$_product->isGrouped()): ?>
         <div class="qty-wrapper">
-            <label for="qty"><?php echo $this->__('Qty:') ?></label>
-            <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+            <label for="qty"><?php echo $this->__('Select Quantity') ?></label>
+            <!-- <input type="text" pattern="\d*" name="qty" id="qty" maxlength="12" value="<?php echo max($this->getProductDefaultQty() * 1, 1) ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" /> -->
+			<select class="form-control qty" name="qty" id="qty">
+            	<?php foreach($quantity as $qty):?>
+                	<option value="<?php echo $qty?>"><?php echo $qty?></option>
+                <?php endforeach;?>
+			</select>
         </div>
         <?php endif; ?>
-        <div class="add-to-cart-buttons">
+        
+        <?php if ((int) Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product)->getQty()>0) { ?>
+				<div class="add-to-cart-buttons">
             <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+            <?php $buttonTitle = $this->__('CUSTOMIZE THIS ITEM'); ?>
+            <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submitCustomize(this)" name="customize_item">
+            <span><span><?php echo $buttonTitle ?></span></span></button>
             <?php echo $this->getChildHtml('', true, true) ?>
         </div>
+ 		<?php  } else {} ?>
+        
+        
+        
     </div>
+    
 <?php endif; ?>

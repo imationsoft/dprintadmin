@@ -34,7 +34,8 @@
 <?php $_priceDisplay = ($this->helper('tax')->displayCartBothPrices()) ? 'display-both-prices' : 'display-single-price'; ?>
 <div class="cart <?php echo $_priceDisplay; ?>">
     <div class="page-title title-buttons">
-        <h1><?php echo $this->__('Shopping Cart') ?></h1>
+		<!--<h3><?php echo $this->__('Current Order Summary (Order number : 42.17278.43976)') ?></h3>-->         
+		<h3><?php echo $this->__('Current Order Summary') ?></h3>
         <?php if(!$this->hasError()): ?>
         <ul class="checkout-types top">
         <?php foreach ($this->getMethods('top_methods') as $method): ?>
@@ -64,9 +65,9 @@
         <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
             <thead>
                 <tr>
-                    <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Product') ?></span></th>
+                    <!-- <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Product') ?></span></th> -->
 
-                    <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
+                    <th rowspan="<?php echo $mergedCells; ?>">Product Name</th>
 
                     <th class="a-center cart-price-head" colspan="<?php echo $mergedCells; ?>">
 <!--                            <div class="cart-price-placeholder">-->
@@ -89,7 +90,7 @@
 <!--                            </div>-->
                     </th>
 
-                    <th class="a-center" rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
+                    <th class="a-center" rowspan="<?php echo $mergedCells; ?>">Action</th>
 
                 </tr>
                 <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
@@ -102,7 +103,7 @@
                 <?php endif; ?>
             </thead>
             <tfoot>
-                <tr>
+                <?php /*?><tr>
                     <td colspan="50" class="a-right cart-footer-actions">
 
                         <!-- Make this button the first responder rather than empty cart -->
@@ -140,7 +141,7 @@
                         </script>
                         <![endif]-->
                     </td>
-                </tr>
+                </tr><?php */?>
             </tfoot>
             <tbody>
             <?php foreach($this->getItems() as $_item): ?>
@@ -152,12 +153,17 @@
     </form>
 
     <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
+	<div class="custom-cart-info">
+	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('custom-content-info')->toHtml(); ?>
+	
+	</div>
+	
     <div class="cart-forms">
         <?php /* Extensions placeholder */ ?>
         <?php echo $this->getChildHtml('checkout_cart_widget') ?>
         <?php echo $this->getChildHtml('coupon') ?>
         <?php echo $this->getChildHtml('checkout.cart.extra') ?>
-        <?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
+        
     </div>
     <div class="cart-totals-wrapper">
         <div class="cart-totals">
@@ -173,5 +179,116 @@
             <?php endif; ?>
         </div>
     </div>
+	<div class="more-info">
+				<div class="col-md-6">
+					<h4>Shipping Information</h4>
+                    <?php
+						$customerAddressId = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping();
+						$customer = Mage::getSingleton('customer/session')->getCustomer();
+						$customerAddressId = Mage::getSingleton('customer/session')->getCustomer()->getDefaultBilling();
+						$address = Mage::getModel('customer/address')->load($customerAddressId);
+						$telephone = $address->getTelephone();
+						$street = $address->getStreet();
+						$City = $address->getCity();
+						$country_id = $address->getCountryId();
+						$customerRegion = $address->getRegion();
+						$postcode = $address->getPostcode();
+						$customerID = $customer->getId();
+						$customer = Mage::getModel('customer/customer')->load($customerID); 
+							foreach ($customer->getAddresses() as $address)
+							{
+								$data = $address->toArray();
+								break;
+							}
+			?>
+					<p><b>Ship to:</b> <?php echo $data['firstname'].' '.$data['lastname'];?></p>
+					<p><?php echo $data['city'];?><br>
+					<?php echo $data['city'];?> <?php echo $data['street'];?><br />
+					<?php echo $data['region'];?>, <?php echo $data['postcode'];?> ,<?php echo $data['country_id'];?>
+					</p>
+                    <p><a href="<?php echo Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true );?>customer/address/">Change Shipping Address</a></p>
+				</div>
+				<div class="col-md-6">
+					<?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
+				</div>
+				<div class="clearfix"></div>
+                <form action="<?php echo Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true );?>branch/index/ordersuccess" method="post" id="order-create" name="order-create">
+					<div class="col-md-12">
+					<h4>Payment Information</h4>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-3">
+									<p><b>Payment Method : </b></p>
+								</div>
+								<div class="col-md-7">
+									<div class="form-group">
+										<label>Purchase Order</label>
+										<input class="form-control required-entry" name="po" type="text">
+									 </div><!-- /.form-group -->
+									 <div class="form-group">
+										<label>Approved By</label>
+										<select class="form-control">
+										  <option></option>
+										</select>
+									 </div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-md-8">
+								<div class="row">
+									<div class="form-group">
+										<label>Order Comments</label>
+										<textarea class="form-control" rows="4"></textarea>
+									 </div>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div><div class="clearfix"></div>
+					<div class="bottom-buttons">
+					<div class="pull-right">
+                    <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo $this->__('PROCESS ORDER'); ?>" class="button btn-cart">
+                    	<span><span><?php echo $this->__('PROCESS ORDER'); ?></span></span>
+                    </button>
+                        <a class="button2 btn-empty btn btn-lg register-now"  href="<?php echo Mage::getBaseUrl( Mage_Core_Model_Store::URL_TYPE_WEB, true );?>branch/index/cancelOrder">Cancel</a> 
+					</div><div class="clearfix"></div>
+				</div>
+                </form>
+			</div>
     <?php echo $this->getChildHtml('crosssell') ?>
 </div>
+<script>
+ 
+var orderCreateForm= new VarienForm('order-create', true);
+            orderCreateForm.submit = function(button, url) {
+				
+
+				
+                if (this.validator.validate()) {
+                    var form = this.form;
+                    var oldUrl = form.action;
+
+                    if (url) {
+                       form.action = url;
+                    }
+                    var e = null;
+                    try {
+                        this.form.submit();
+                    } catch (e) {
+                    }
+                    this.form.action = oldUrl;
+                    if (e) {
+                        throw e;
+                    }
+
+                    if (button && button != 'undefined') {
+                        button.disabled = true;
+                    }
+                }
+            }.bind(orderCreateForm);
+
+
+</script>

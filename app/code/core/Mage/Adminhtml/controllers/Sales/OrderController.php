@@ -204,12 +204,15 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
      */
     public function approveAction()         //added by Wang 2015-6-25
     {
+        // $orderId =$this->_getSession()->getOrder()->getIncrementId();
+        // print_r($orderId);exit;
         if ($order = $this->_initOrder()) {
             try {
                 $order->approve()
                     ->save();
+                $orderId = $order->getId();
                 $this->_getSession()->addSuccess(
-                    $this->__('The order has been put on approve.')
+                    $this->__('The Order [ # 1000000'. $orderId.'] has been approved.')
                 );
             }
             catch (Mage_Core_Exception $e) {
@@ -221,7 +224,6 @@ class Mage_Adminhtml_Sales_OrderController extends Mage_Adminhtml_Controller_Act
             $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
         }
     }
-
 
     /**
      * Unhold order

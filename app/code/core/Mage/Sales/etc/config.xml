@@ -1293,7 +1293,7 @@
                         <label>On Hold</label>
                     </holded>
 					<approved translate="label">
-                        <label>Approve</label>
+                        <label>Approved</label>
                     </approved>
                     <complete translate="label">
                         <label>Complete</label>
@@ -1361,7 +1361,7 @@
                         <visible_on_front>1</visible_on_front>
                     </holded>
 					 <approved translate="label">
-                        <label>Approve</label>
+                        <label>Approved</label>
                         <statuses>
                             <approved default="1"/>
                         </statuses>

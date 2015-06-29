@@ -91,6 +91,9 @@ Layout for customer login page
         <!-- Mage_Customer -->
         <remove name="right"/>
         <remove name="left"/>
+		<remove name="header"/>
+		<remove name="footer"/>
+			<remove name="left.catsidebarnav"/>
 
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -109,6 +112,7 @@ Layout for customer log out page
         <!-- Mage_Customer -->
         <remove name="right"/>
         <remove name="left"/>
+	<remove name="left.catsidebarnav"/>
 
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -127,6 +131,9 @@ New customer registration
         <!-- Mage_Customer -->
         <remove name="right"/>
         <remove name="left"/>
+		<remove name="header"/>
+		<remove name="footer"/>
+	<remove name="left.catsidebarnav"/>
 
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
@@ -142,8 +149,11 @@ New customer registration
 
     <customer_account_forgotpassword translate="label">
         <label>Customer Forgot Password Form</label>
-        <remove name="right"/>
+		<remove name="right"/>
         <remove name="left"/>
+		<remove name="header"/>
+		<remove name="footer"/>
+	<remove name="left.catsidebarnav"/>
 
         <reference name="head">
             <action method="setTitle" translate="title" module="customer"><title>Forgot Your Password</title></action>
@@ -162,6 +172,7 @@ New customer registration
         <label>Reset a Password</label>
         <remove name="right"/>
         <remove name="left"/>
+	<remove name="left.catsidebarnav"/>
 
         <reference name="head">
             <action method="setTitle" translate="title" module="customer">
@@ -196,6 +207,8 @@ New customer registration
 
     <customer_account_edit translate="label">
         <label>Customer Account Edit Form</label>
+			<remove name="left.catsidebarnav"/>
+
         <update handle="customer_account"/>
         <reference name="root">
             <action method="setHeaderTitle" translate="title" module="customer"><title>Edit Account Info</title></action>
@@ -218,6 +231,9 @@ Customer account pages, rendered for all tabs in dashboard
         <!--remove name="catalog.compare.sidebar"/>
         <remove name="sale.reorder.sidebar"/-->
         <!-- Mage_Customer -->
+		<remove name="footer"/>
+			<remove name="left.catsidebarnav"/>
+
         <reference name="root">
             <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
             <action method="addBodyClass"><class>customer-account</class></action>
@@ -243,7 +259,7 @@ Customer account pages, rendered for all tabs in dashboard
                 <!--<action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>-->
                 <!--<action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>-->
             <!--</block>-->
-            <block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
+            <!--<block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>-->
             <remove name="tags_popular"/>
 
         </reference>
@@ -254,6 +270,9 @@ Customer account home dashboard layout
 -->
 
     <customer_account_index translate="label">
+	<remove name="footer"/>
+		<remove name="left.catsidebarnav"/>
+
         <label>Customer My Account Dashboard</label>
         <update handle="customer_account"/>
         <!-- Mage_Customer -->
@@ -278,6 +297,8 @@ Customer account address book
 
     <customer_address_index translate="label">
         <label>Customer My Account Address Book</label>
+			<remove name="left.catsidebarnav"/>
+
         <!-- Mage_Customer -->
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
@@ -291,6 +312,8 @@ Customer account address edit page
 
     <customer_address_form translate="label">
         <label>Customer My Account Address Edit Form</label>
+			<remove name="left.catsidebarnav"/>
+
         <!-- Mage_Customer -->
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
