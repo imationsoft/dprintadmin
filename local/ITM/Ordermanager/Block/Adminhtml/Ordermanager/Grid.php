@@ -149,9 +149,8 @@ class ITM_Ordermanager_Block_Adminhtml_Ordermanager_Grid extends Mage_Adminhtml_
  
     public function getRowUrl($row)
     {
-        //print_r($this->getUrl('./admin/sales_order/actions/view', array('order_id' => $row->getId())));
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
-            return $this->getUrl('./admin/sales_order/view', array('order_id' => $row->getId()));
+            return  Mage::helper('adminhtml')->getUrl("adminhtml/sales_order/view", array('order_id'=>$row->getId())); // added by Wang 2015-7-8
         }
         return false;
     }
