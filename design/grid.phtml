@@ -158,26 +158,9 @@ $numColumns = sizeof($this->getColumns());
                 <?php if ($this->shouldRenderCell($_item, $_column)):?>
 
                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                        <?php
-                         //added by Wang 2015-7-3
-                        if ($_item['created_at']) {
-                            if ($_item['base_grand_total'] && $_item['base_grand_total'] != 0) {
-                                ?>
-                                <td <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
-                                    <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
-
-                                </td>
-                            <?php
-                                 }
-                            }
-                            else{?>
-                                <td <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
-                                    <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
-                                </td>
-                        <?php
-                            }
-                            ?>
-
+			<td <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
+			    <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+			</td>
                     <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
                         <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last"><?php echo $this->getEmptyCellLabel()?></td>
                     <?php endif;?>
