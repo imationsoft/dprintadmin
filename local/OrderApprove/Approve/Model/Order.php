@@ -255,6 +255,10 @@
  * @method Mage_Sales_Model_Order setApproveBeforeState(string $value)
  * @method string getApproveBeforeStatus()
  * @method Mage_Sales_Model_Order setApproveBeforeStatus(string $value)
+ * @method string getRejectBeforeState()                               //added by Wang 2015-7-7
+ * @method Mage_Sales_Model_Order setRejectBeforeState(string $value)
+ * @method string getRejectBeforeStatus()
+ * @method Mage_Sales_Model_Order setRejectBeforeStatus(string $value)
  * @method string getOrderCurrencyCode()
  * @method Mage_Sales_Model_Order setOrderCurrencyCode(string $value)
  * @method string getOriginalIncrementId()
@@ -352,6 +356,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
     const STATE_CANCELED        = 'canceled';
     const STATE_HOLDED          = 'holded';
     const STATE_APPROVE          = 'approved';              //added by Wang 2015-6-25
+    const STATE_REJECT          = 'rejected';               //added by Wang 2015-7-7
     const STATE_PAYMENT_REVIEW  = 'payment_review';
 
     /**
@@ -364,6 +369,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
      */
     const ACTION_FLAG_CANCEL                    = 'cancel';
     const ACTION_FLAG_APPROVE                   = 'approve'; //added by Wang 2015-6-25
+    const ACTION_FLAG_REJECT                    = 'reject';  //added by Wang 2015-7-7
     const ACTION_FLAG_HOLD                      = 'hold';
     const ACTION_FLAG_UNHOLD                    = 'unhold';
     const ACTION_FLAG_EDIT                      = 'edit';
@@ -569,7 +575,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
         }
 
         $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $this->getState() === self::STATE_APPROVE) {
+        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $this->getState() === self::STATE_APPROVE || $state === self::STATE_REJECT) {
             return false;
         }
 
@@ -622,7 +628,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
             return false;
         }
         $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
+        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_REJECT) {
             return false;
         }
 
@@ -653,7 +659,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
             return false;
         }
 
-        if ($this->isCanceled() || $this->getState() === self::STATE_CLOSED) {
+        if ($this->isCanceled() || $this->getState() === self::STATE_CLOSED || $this->getState() === self::STATE_REJECT) {
             return false;
         }
 
@@ -680,7 +686,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
     {
         $state = $this->getState();
         if ($this->isCanceled() || $this->isPaymentReview()
-            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_HOLDED || $state === self::STATE_APPROVE) {
+            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_HOLDED || $state === self::STATE_APPROVE || $state === self::STATE_REJECT) {
             return false;
         }
 
@@ -690,6 +696,24 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
         return true;
     }
 
+    /**
+     * Retrieve order reject availability
+     *
+     * @return bool
+     */
+    public function canReject()  //added by Wang 2015-7-7
+    {
+        $state = $this->getState();
+        if ($this->isCanceled() || $this->isPaymentReview()
+            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_HOLDED || $state === self::STATE_REJECT|| $state === self::STATE_APPROVE) {
+            return false;
+        }
+
+        if ($this->getActionFlag(self::ACTION_FLAG_REJECT) === false) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Retrieve order hold availability
@@ -700,7 +724,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
     {
         $state = $this->getState();
         if ($this->isCanceled() || $this->isPaymentReview()
-            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_HOLDED || $state === self::STATE_APPROVE) {
+            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_HOLDED || $state === self::STATE_APPROVE || $state === self::STATE_REJECT) {
             return false;
         }
 
@@ -744,7 +768,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
      */
     public function canShip()
     {
-        if ($this->canUnhold() || $this->isPaymentReview()) {
+        if ($this->canUnhold() || $this->isPaymentReview() || $this->isRejected()) {
             return false;
         }
 
@@ -779,7 +803,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
 
         $state = $this->getState();
         if ($this->isCanceled() || $this->isPaymentReview()
-            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $this->getState() === self::STATE_APPROVE) {
+            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $this->getState() === self::STATE_APPROVE || $this->getState() === self::STATE_REJECT) {
             return false;
         }
 
@@ -822,7 +846,7 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
      */
     protected function _canReorder($ignoreSalable = false)
     {
-        if ($this->canUnhold() || $this->isPaymentReview() || !$this->getCustomerId()) {
+        if ($this->canUnhold() || $this->isPaymentReview() || !$this->getCustomerId() ||$this->isRejected()) {
             return false;
         }
 
@@ -1161,6 +1185,17 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
         $this->setApproveBeforeState($this->getState());
         $this->setApproveBeforeStatus($this->getStatus());
         $this->setState(self::STATE_APPROVE, true);
+        return $this;
+    }
+
+    public function reject()
+    {
+        if (!$this->canReject()) {
+            Mage::throwException(Mage::helper('sales')->__('Reject action is not available.'));
+        }
+        $this->setRejectBeforeState($this->getState());
+        $this->setRejectBeforeStatus($this->getStatus());
+        $this->setState(self::STATE_REJECT, true);
         return $this;
     }
 
@@ -2336,6 +2371,16 @@ class OrderApprove_Approve_Model_Order extends Mage_Sales_Model_Order
     public function isCanceled()
     {
         return ($this->getState() === self::STATE_CANCELED);
+    }
+
+    /**
+     * Check whether order is rejected
+     *
+     * @return bool
+     */
+    public function isRejected()
+    {
+        return ($this->getState() === self::STATE_REJECT);
     }
 
     /**

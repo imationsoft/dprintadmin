@@ -131,6 +131,7 @@ class OrderApprove_Approve_Sales_OrderController extends Mage_Adminhtml_Sales_Or
         }
     }
 
+
     /**
      * Notify user
      */
@@ -212,16 +213,50 @@ class OrderApprove_Approve_Sales_OrderController extends Mage_Adminhtml_Sales_Or
                     ->save();
                 $orderId = $order->getId();
                // $sum = 10000002+$orderId;
-                $sum = 1000000+$orderId;
+                $sum = 100000002+$orderId;
                 $this->_getSession()->addSuccess(
                     $this->__('The Order [ #'. $sum.'] has been approved.')
                 );
+                $order->sendOrderUpdateEmail(true,"approve");
+               // $user = Mage::getSingleton('admin/session'); //added by wang 2015-7-7
+               // $user->sendOrderUpdateEmail(true,"approve"); //added by wang 2015-7-7
+
+
             }
             catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }
             catch (Exception $e) {
                 $this->_getSession()->addError($this->__('The order was not put on approve.'));
+            }
+            $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
+        }
+    }
+
+
+    /**
+     * Reject order
+     */
+    public function rejectAction()         //added by Wang 2015-7-7
+    {
+        if ($order = $this->_initOrder()) {
+            try {
+                $order->reject()
+                    ->save();
+                $orderId = $order->getId();
+                // $sum = 10000002+$orderId;
+                $sum = 100000000+$orderId;
+                $this->_getSession()->addSuccess(
+                    $this->__('The Order [ #'. $sum.'] has been rejected.')
+                );
+                $order->sendOrderUpdateEmail(true,"reject");
+
+            }
+            catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            }
+            catch (Exception $e) {
+                $this->_getSession()->addError($this->__('The order was not put on reject.'));
             }
             $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
         }
@@ -353,10 +388,11 @@ class OrderApprove_Approve_Sales_OrderController extends Mage_Adminhtml_Sales_Or
      */
     public function shipmentsAction()
     {
-        $this->_initOrder();
+        $order = $this->_initOrder();
         $this->getResponse()->setBody(
             $this->getLayout()->createBlock('adminhtml/sales_order_view_tab_shipments')->toHtml()
         );
+        $order->sendOrderUpdateEmail(true,"shipment");//addded by Wang 2015-7-6
     }
 
     /**
@@ -450,7 +486,7 @@ class OrderApprove_Approve_Sales_OrderController extends Mage_Adminhtml_Sales_Or
     }
 
     /**
-     * Hold selected orders
+     * Approve selected orders 2015-6-26
      */
     public function massApproveAction()
     {
@@ -476,6 +512,37 @@ class OrderApprove_Approve_Sales_OrderController extends Mage_Adminhtml_Sales_Or
         }
         if ($countApproveOrder) {
             $this->_getSession()->addSuccess($this->__('%s order(s) have been approved.', $countApproveOrder));
+        }
+        $this->_redirect('*/*/');
+    }
+
+    /**
+     * Reject selected orders added by Wang 2015-7-7
+     */
+    public function massRejectAction()
+    {
+        $orderIds = $this->getRequest()->getPost('order_ids', array());
+        $countRejectOrder = 0;
+        $countNonRejectOrder = 0;
+        foreach ($orderIds as $orderId) {
+            $order = Mage::getModel('sales/order')->load($orderId);
+            if ($order->canCancel()) {
+                $order->cancel()
+                    ->save();
+                $countRejectOrder++;
+            } else {
+                $countNonRejectOrder++;
+            }
+        }
+        if ($countNonRejectOrder) {
+            if ($countNonRejectOrder) {
+                $this->_getSession()->addError($this->__('%s order(s) cannot be rejected', $countNonRejectOrder));
+            } else {
+                $this->_getSession()->addError($this->__('The order(s) cannot be rejected'));
+            }
+        }
+        if ($countRejectOrder) {
+            $this->_getSession()->addSuccess($this->__('%s order(s) have been rejected.', $countRejectOrder));
         }
         $this->_redirect('*/*/');
     }
@@ -724,9 +791,12 @@ class OrderApprove_Approve_Sales_OrderController extends Mage_Adminhtml_Sales_Or
     {
         $action = strtolower($this->getRequest()->getActionName());
         switch ($action) {
-//            case 'approve':
-//                $aclResource = 'sales/order/actions/approve';
-//                break;
+            case 'approve':
+                $aclResource = 'sales/order/actions/approve';
+                break;
+            case 'reject':
+                $aclResource = 'sales/order/actions/reject';
+                break;
             case 'hold':
                 $aclResource = 'sales/order/actions/hold';
                 break;

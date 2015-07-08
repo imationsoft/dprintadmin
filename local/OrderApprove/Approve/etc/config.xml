@@ -10,7 +10,7 @@
 				<rewrite>
 					<sales_order_view>OrderApprove_Approve_Block_Adminhtml_Sales_Order_View</sales_order_view>
 				</rewrite>
-			</adminhtml>
+             </adminhtml>
 		</blocks>
 		<models>
 			<sales>
@@ -40,6 +40,9 @@
 					<approved translate="label">
                         <label>Approved</label>
                     </approved>
+                    <rejected translate="label">
+                        <label>Rejected</label>
+                    </rejected>
                     <complete translate="label">
                         <label>Complete</label>
                     </complete>
@@ -112,6 +115,13 @@
                         </statuses>
                         <visible_on_front>1</visible_on_front>
                     </approved>
+                    <rejected translate="label">
+                        <label>Rejected</label>
+                        <statuses>
+                            <rejected default="1"/>
+                        </statuses>
+                        <visible_on_front>1</visible_on_front>
+                    </rejected>
                     <payment_review translate="label">
                         <label>Payment Review</label>
                         <statuses>

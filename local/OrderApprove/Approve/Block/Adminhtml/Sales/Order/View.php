@@ -53,7 +53,14 @@ class OrderApprove_Approve_Block_Adminhtml_Sales_Order_View extends Mage_Adminht
                 'label'     => Mage::helper('sales')->__('Approve'),
                 'onclick'   => 'setLocation(\'' . $this->getApproveUrl() . '\')',
             ));
-         }        
+         }
+        if ($this->_isAllowedAction('reject') && $order->canReject()) {               //added by Wang 2015-7-7
+
+            $this->_addButton('order_reject', array(
+                'label'     => Mage::helper('sales')->__('Reject'),
+                'onclick'   => 'setLocation(\'' . $this->getRejectUrl() . '\')',
+            ));
+        }
     }
 	/**
      * Retrieve order model object
@@ -68,6 +75,11 @@ class OrderApprove_Approve_Block_Adminhtml_Sales_Order_View extends Mage_Adminht
     public function getApproveUrl()  //added by Wang 2015-6-25
     {
         return $this->getUrl('*/*/approve');
+    }
+
+    public function getRejectUrl()  //added by Wang 2015-7-7
+    {
+        return $this->getUrl('*/*/reject');
     }
 
 	public function getUrl($params='', $params2=array())
