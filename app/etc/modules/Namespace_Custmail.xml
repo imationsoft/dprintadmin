@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Namespace_Custmail>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Namespace_Custmail>
+    </modules>
+</config>

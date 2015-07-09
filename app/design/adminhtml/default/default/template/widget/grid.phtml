@@ -152,14 +152,34 @@ $numColumns = sizeof($this->getColumns());
         <tbody>
         <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
         <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+
             <tr title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?> >
             <?php $i=0;foreach ($this->getColumns() as $_column): ?>
 
                 <?php if ($this->shouldRenderCell($_item, $_column)):?>
+
                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                    <td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns?'last':'' ?>">
-                        <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
-                    </td>
+<!--                     --><?php
+                    //print_r($_item);exit;
+//                        // added by Wang 2015-7-3
+//                        if ($_item['created_at']) {
+//                            if ($_item['base_grand_total'] && $_item['base_grand_total'] != 0) {
+//                                ?>
+<!--                                <td --><?php //echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?><!--class="--><?php //echo $_column->getCssProperty() ?><!-- --><?php //echo ++$i == $numColumns ? 'last' : '' ?><!--">-->
+<!--                                    --><?php //echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+<!---->
+<!--                                </td>-->
+<!--                            --><?php
+//                                 }
+//                            }
+//                            else{?>
+                                <td <?php echo($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
+                                    <?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                </td>
+<!--                        --><?php
+//                            }
+//                            ?>
+
                     <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
                         <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last"><?php echo $this->getEmptyCellLabel()?></td>
                     <?php endif;?>

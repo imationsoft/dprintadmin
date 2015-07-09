@@ -1,0 +1,35 @@
+<config>
+    <modules>
+        <Namespace_Custmail>
+            <version>1.0.0</version>
+        </Namespace_Custmail>
+    </modules>
+ 
+    <global>
+        <models>
+            <custmail>
+                <class>Namespace_Custmail_Model</class>
+            </custmail>
+        </models>
+        <events>
+            <sales_order_save_commit_after>
+                <observers>
+                    <mail_status_change>
+                        <type>singleton</type>
+                        <class>custmail/observer</class>
+                        <method>invoicedStatusChange</method>
+                    </mail_status_change>
+                </observers>
+            </sales_order_save_commit_after>
+        </events>
+        <template>
+            <email>
+                <custom_order_tpl module="Namespace_Custmail">
+                    <label>Status Mail Invoice</label>
+                    <file>statusmail_processing.html</file>
+                    <type>html</type>
+                </custom_order_tpl>
+            </email>
+        </template>
+    </global>
+</config>
